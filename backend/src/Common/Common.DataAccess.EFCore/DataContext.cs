@@ -1,10 +1,4 @@
-﻿/*
-* Copyright (c) Akveo 2019. All Rights Reserved.
-* Licensed under the Single Application / Multi Application License.
-* See LICENSE_SINGLE_APP / LICENSE_MULTI_APP in the ‘docs’ folder for license information on type of purchased license.
-*/
-
-using Common.DataAccess.EFCore.Configuration;
+﻿using Common.DataAccess.EFCore.Configuration;
 using Common.DataAccess.EFCore.Configuration.System;
 using Common.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +15,15 @@ namespace Common.DataAccess.EFCore
         public DbSet<UserClaim> UserClaims { get; set; }
         public DbSet<UserPhoto> UserPhotos { get; set; }
         public DbSet<Settings> Settings { get; set; }
+        public DbSet<HotspotResult> HotspotResults { get; set; }
+        public DbSet<WonCode> WonCodes { get; set; }
+        public DbSet<Code> Codes { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupEmail> GroupEmails { get; set; }
 
+        public DataContext() { 
+        
+        }
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,7 +37,21 @@ namespace Common.DataAccess.EFCore
             modelBuilder.ApplyConfiguration(new UserPhotoConfig());
             modelBuilder.ApplyConfiguration(new SettingsConfig());
 
-            modelBuilder.HasDefaultSchema("starter_core");
+            modelBuilder.HasDefaultSchema("lottery");
+
+            modelBuilder.Entity<HotspotResult>(entity => {
+                entity.HasMany(e => e.WonCodes)
+                       .WithOne(e => e.HotspotResult)
+                       .HasForeignKey(e => e.HotspotResultId)
+                       .OnDelete(DeleteBehavior.Cascade);            
+            });
+
+            modelBuilder.Entity<Code>(entity => {
+                entity.HasMany(e => e.WonCodes)
+                       .WithOne(e => e.Code)
+                       .HasForeignKey(e => e.CodeId)
+                       .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

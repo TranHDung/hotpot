@@ -4,9 +4,14 @@
 * See LICENSE_SINGLE_APP / LICENSE_MULTI_APP in the ‘docs’ folder for license information on type of purchased license.
 */
 
+using Common.DataAccess.EFCore;
+using Common.DataAccess.EFCore.Repositories;
+using Common.Services;
 using Common.Services.Infrastructure;
 using Common.WebApiCore.Identity;
 using Common.WebApiCore.Setup;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +72,12 @@ namespace Common.WebApiCore
                     options.SerializerSettings.Converters.Add(new StringEnumConverter { NamingStrategy = new CamelCaseNamingStrategy() });
                     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
+
+            services.AddHangfire(config => config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                                           .UseSimpleAssemblyNameTypeSerializer()
+                                           .UseDefaultTypeSerializer()
+                                           .UseMemoryStorage());
+            services.AddHangfireServer();
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env, IDataBaseInitializer dataBaseInitializer)
@@ -102,6 +113,10 @@ namespace Common.WebApiCore
             {
                 endpoints.MapControllers();
             });
+
+            app.UseHangfireDashboard();
+
+            RecurringJob.AddOrUpdate(() => new BackgroundJobService(new HotspotResultService(new HotspotResultRepository(new DataContext()))).Recurring(), "*/3 * * * *");
         }
 
         private void RegisterMapping()

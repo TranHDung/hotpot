@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.23" />
+    <PackageReference Include="HtmlAgilityPack.CssSelectors" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Common.Services.Infrastructure\Common.Services.Infrastructure.csproj" ReferenceOutputAssembly="true" />
     <ProjectReference Include="..\Common.Utils\Common.Utils.csproj" ReferenceOutputAssembly="true" />
   </ItemGroup>

@@ -17,6 +17,7 @@ namespace Common.WebApiCore.Setup
 
             config.AddProfile<UserProfile>();
             config.AddProfile<SettingsProfile>();
+            config.AddProfile<HotspotResultProfile>();
         }
     }
 }
