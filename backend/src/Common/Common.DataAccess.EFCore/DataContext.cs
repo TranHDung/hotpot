@@ -2,6 +2,9 @@
 using Common.DataAccess.EFCore.Configuration.System;
 using Common.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace Common.DataAccess.EFCore
 {
@@ -26,6 +29,18 @@ namespace Common.DataAccess.EFCore
         }
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Common.WebApiCore"))
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .Build();
+            var connectionString = configuration.GetConnectionString("localDb");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

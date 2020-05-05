@@ -1,8 +1,7 @@
 ﻿using Common.Services.Infrastructure;
 using Common.Services.Infrastructure.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Common.Services
 {
@@ -27,7 +26,7 @@ namespace Common.Services
 
         public void Recurring()
         {
-            _hotspotResultService.CrawlHotspotResult();
+            _hotspotResultService.CrawlHotspotResult().Wait();
         }
 
         public void Schedule()

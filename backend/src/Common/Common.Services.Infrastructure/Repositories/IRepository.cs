@@ -15,13 +15,15 @@ namespace Common.Services.Infrastructure
         IQueryable<TEntity> GetAll();
         // This method was not in the videos, but I thought it would be useful to add.
         TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
-        IQueryable<TEntity> Sort(IQueryable<TEntity> entities, Sorting sorting);
+        TEntity FirstOrDefault();
+        Task<TEntity> FirstOrDefaultAsync();
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
         IQueryable<TEntity> Paging(IQueryable<TEntity> entities, Paging paging);
         void Add(TEntity entity);
         Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
         void AddRange(IEnumerable<TEntity> entities);
         Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
-        void Remove(TEntity entity);
+        void Remove(int id);
         void RemoveRange(IEnumerable<TEntity> entities);
         void Update(TEntity entity);
         void UpdateRange(IEnumerable<TEntity> entities);

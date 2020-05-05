@@ -15,7 +15,6 @@ namespace Common.Services
     public class HotspotResultService: IHotspotResultService
     {
         private readonly IHotspotResultRepository _hotspotResultRepos;
-
         public HotspotResultService(IHotspotResultRepository hotspotResultRepos)
         {
             _hotspotResultRepos = hotspotResultRepos;
@@ -24,22 +23,27 @@ namespace Common.Services
         {
             var url = "https://www.calottery.com/draw-games/hot-spot";
             var httpClient = new HttpClient();
-
             var html = await httpClient.GetStringAsync(url);
-
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
+            //cache
+            var _drawNumber = await _hotspotResultRepos.GetNewestDrawNumberAsync();
+            var drawNumber = Int32.Parse(doc.QuerySelector(".current-drawNumber").InnerText);
 
-            var date = doc.QuerySelectorAll(".htspt__cards--next-draw-date strong")[0].InnerText;
-            var time = doc.QuerySelectorAll(".htspt__cards--next-draw-date strong")[1].InnerText.ToUpper().Replace(".", "");
-            var result = new HotspotResult
+            if (_drawNumber != drawNumber)
             {
-                DrawNumber = Int32.Parse(doc.QuerySelector(".current-drawNumber").InnerText),
-                DrawDate = DateTime.ParseExact(date + " " + time, "MMM dd, yyyy h:mm tt", CultureInfo.InvariantCulture),
-                BlueNumbers = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item.blue-num").Select(e => e.InnerText).ToList(),
-                YellowNumber = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item.yellow-num").Select(e => e.InnerText).ToString()
-            };
-            await _hotspotResultRepos.AddAsync(result);
+                var date = doc.QuerySelectorAll(".htspt__cards--next-draw-date strong")[0].InnerText;
+                var time = doc.QuerySelectorAll(".htspt__cards--next-draw-date strong")[1].InnerText.ToUpper().Replace(".", "");
+                var result = new HotspotResult
+                {
+                    DrawNumber = drawNumber,
+                    DrawDate = DateTime.ParseExact(date + " " + time, "MMM d, yyyy h:mm tt", CultureInfo.InvariantCulture),
+                    BlueNumbers = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item.blue-num").Select(e => e.InnerText).ToList(),
+                    YellowNumber = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item.yellow-num").Select(e => e.InnerText).ToList().FirstOrDefault()
+                };
+
+                await _hotspotResultRepos.AddAsync(result);
+            }
         }
     }
 }

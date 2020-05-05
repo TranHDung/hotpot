@@ -1,8 +1,10 @@
-﻿using Common.Entities;
+﻿using Common.DTO;
+using Common.Entities;
 using Common.Services.Infrastructure.Repositories;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Common.DataAccess.EFCore.Repositories
 {
@@ -13,6 +15,96 @@ namespace Common.DataAccess.EFCore.Repositories
         public HotspotResultRepository(DataContext context) : base(context)
         {
             Context = context;
+        }
+
+        public IQueryable<HotspotResult> GetByFilter(FilterHotspotResult filter)
+        {
+            var query = GetAll();
+            if (filter.StartDrawDate != null) 
+            {
+                query = query.Where(e => e.DrawDate >= filter.StartDrawDate);
+            }
+
+            if (filter.EndDrawDate != null)
+            {
+                query = query.Where(e => e.DrawDate <= filter.EndDrawDate);
+            }
+
+            if (filter.StartSession != null)
+            {
+                query = query.Where(e => e.DrawNumber >= filter.StartSession);
+            }
+
+            if (filter.EndSession != null)
+            {
+                query = query.Where(e => e.DrawNumber <= filter.EndSession);
+            }
+
+            if (filter.TopSeccion != null)
+            {
+                query = query.OrderByDescending(e => e.DrawNumber).Take(filter.TopSeccion.Value);
+            }
+
+            if (filter.CodeId != null)
+            {
+                var hotspotResultWasWon = Context.WonCodes
+                                          .Where(e => e.CodeId == filter.CodeId).Select(e => e.HotspotResultId);
+                query = query
+                       .Where(e => hotspotResultWasWon.Contains(e.Id));
+            }
+
+            if (filter.GroupId != null)
+            {
+                var hotspotResultWasWon = Context.WonCodes
+                                                 .Include(wc => wc.Code)
+                                                 .ThenInclude(c => c.Group)
+                                                 .Where(wc => wc.Code.GroupId == filter.GroupId)
+                                                 .Select(wc => wc.HotspotResultId);
+                                          
+                query = query
+                       .Where(e => hotspotResultWasWon.Contains(e.Id));
+            }
+            
+            return query;
+        }
+
+        public async Task<int> GetNewestDrawNumberAsync()
+        {
+            var hotspotResult = await Context.HotspotResults.OrderByDescending(e => e.DrawNumber).FirstOrDefaultAsync();
+            return hotspotResult != null ? hotspotResult.DrawNumber : 0 ;
+        }
+
+        public IQueryable<HotspotResult> Sort(IQueryable<HotspotResult> entities, Sorting sorting)
+        {
+            if (sorting != null)
+            {
+                if (sorting.sortDerection == "asc")
+                {
+                    switch (sorting.columnName)
+                    {
+                        case "drawNumber":
+                            entities = entities.OrderBy(p => p.DrawNumber);
+                            break;
+                        default:
+                            entities = entities.OrderBy(p => p.DrawDate);
+                            break;
+                    }
+                }
+                if (sorting.sortDerection == "desc")
+                {
+                    switch (sorting.columnName)
+                    {
+                        case "drawNumber":
+                            entities = entities.OrderByDescending(p => p.DrawNumber);
+                            break;
+                        default:
+                            entities = entities.OrderByDescending(p => p.DrawDate);
+                            break;
+                    }
+                }
+            }
+
+            return entities;
         }
     }
 }

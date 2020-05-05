@@ -6,7 +6,7 @@ namespace Common.DTO
 {
     public class Paging
     {
-        public int Skip { get; set; }
-        public int Top { get; set; }
+        public int Skip { get; set; } = 0;
+        public int Top { get; set; } = 10;
     }
 }

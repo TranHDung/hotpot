@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using Common.Entities;
 using Common.Services.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,15 +12,13 @@ using System.Threading.Tasks;
 
 namespace Common.DataAccess.EFCore.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         private readonly DataContext Context;
-        private readonly DbSet<TEntity> _dbSet;
 
         public Repository(DataContext context)
         {
             Context = context;
-            _dbSet = Context.Set<TEntity>();
         }
 
         public TEntity GetById(int id)
@@ -31,30 +30,27 @@ namespace Common.DataAccess.EFCore.Repositories
 
         public IQueryable<TEntity> GetAll()
         {
-            return _dbSet.AsNoTracking();
+            return Context.Set<TEntity>().AsNoTracking();
         }
 
         public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbSet.FirstOrDefault(predicate);
+            return Context.Set<TEntity>().FirstOrDefault(predicate);
         }
 
-        public IQueryable<TEntity> Sort(IQueryable<TEntity> entities, Sorting sorting)
+        public TEntity FirstOrDefault()
         {
-            if (sorting != null) 
-            {
-                if (sorting.sortDerection == "asc")
-                {
-                    entities = entities.OrderBy(p => typeof(TEntity).GetProperty(sorting.columnName).GetValue(p, null));
-                }
+            return Context.Set<TEntity>().FirstOrDefault();
+        }
 
-                if (sorting.sortDerection == "desc")
-                {
-                    entities = entities.OrderByDescending(p => typeof(TEntity).GetProperty(sorting.columnName).GetValue(p, null));
-                }
-            }
+        public async Task<TEntity> FirstOrDefaultAsync()
+        {
+            return await Context.Set<TEntity>().FirstOrDefaultAsync();
+        }
 
-            return entities;
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
         public IQueryable<TEntity> Paging(IQueryable<TEntity> entities, Paging paging)
@@ -64,48 +60,52 @@ namespace Common.DataAccess.EFCore.Repositories
 
         public void Add(TEntity entity)
         {
-            _dbSet.Add(entity);
+            Context.Set<TEntity>().Add(entity);
             SaveChanges();
         }
 
         public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            await _dbSet.AddAsync(entity, cancellationToken);
+            await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
             await SaveChangesAsync(cancellationToken);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.AddRange(entities);
+            Context.Set<TEntity>().AddRange(entities);
             SaveChanges();
         }
         public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            await _dbSet.AddRangeAsync(entities, cancellationToken);
+            await Context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
             await SaveChangesAsync(cancellationToken);
         }
 
-        public void Remove(TEntity entity)
+        public void Remove(int id)
         {
-            _dbSet.Remove(entity);
-            SaveChanges();
+            var entity = Context.Set<TEntity>().FirstOrDefault(e => e.Id == id);
+            if (entity != null) 
+            {
+                Context.Set<TEntity>().Remove(entity);
+                SaveChanges();
+            }
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.RemoveRange(entities);
+            Context.Set<TEntity>().RemoveRange(entities);
             SaveChanges();
         }
 
         public void Update(TEntity entity)
         {
-            _dbSet.Update(entity);
+            Context.Set<TEntity>().Update(entity);
             SaveChanges();
         }
 
         public void UpdateRange(IEnumerable<TEntity> entities)
         {
-            _dbSet.UpdateRange(entities);
+            Context.Set<TEntity>().UpdateRange(entities);
             SaveChanges();
         }
 
