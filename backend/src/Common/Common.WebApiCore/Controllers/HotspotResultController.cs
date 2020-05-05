@@ -31,7 +31,7 @@ namespace Common.WebApiCore.Controllers
             var totalCount = await allQuery.CountAsync();
             allQuery = _hotspotResultRepos.Sort(allQuery, filter.Sorting);
             allQuery = _hotspotResultRepos.Paging(allQuery, filter.Paging);
-           var result = allQuery.ToList();
+            var result = allQuery.ToList();
            
             var dtos = result?.MapTo<List<HotspotResultDTO>>();
             return Ok(new ResultFilter<HotspotResultDTO> { Data = dtos, TotalCount = totalCount });

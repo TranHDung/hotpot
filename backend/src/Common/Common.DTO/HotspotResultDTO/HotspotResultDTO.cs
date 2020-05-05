@@ -14,5 +14,6 @@ namespace Common.DTO
         public ICollection<string> BlueNumbers { get; set; }
 
         public string YellowNumber { get; set; }
+        public DateTime CreateAt { get; set; }
     }
 }

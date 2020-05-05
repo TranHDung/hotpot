@@ -60,23 +60,33 @@ namespace Common.DataAccess.EFCore.Repositories
 
         public void Add(TEntity entity)
         {
+            entity.Created();
             Context.Set<TEntity>().Add(entity);
             SaveChanges();
         }
 
         public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
+            entity.Created();
             await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
             await SaveChangesAsync(cancellationToken);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
+            foreach (var e in entities)
+            {
+                e.Created();
+            }
             Context.Set<TEntity>().AddRange(entities);
             SaveChanges();
         }
         public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
+            foreach (var e in entities)
+            {
+                e.Created();
+            }
             await Context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
             await SaveChangesAsync(cancellationToken);
         }
@@ -99,12 +109,17 @@ namespace Common.DataAccess.EFCore.Repositories
 
         public void Update(TEntity entity)
         {
+            entity.Modified();
             Context.Set<TEntity>().Update(entity);
             SaveChanges();
         }
 
         public void UpdateRange(IEnumerable<TEntity> entities)
         {
+            foreach (var e in entities)
+            {
+                e.Modified();
+            }
             Context.Set<TEntity>().UpdateRange(entities);
             SaveChanges();
         }
