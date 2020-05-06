@@ -49,7 +49,10 @@ namespace Common.WebApiCore.Controllers
 
             var entity = dto.MapTo<Group>();
 
-            await _groupRepos.AddAsync(entity);
+            var success = await _groupRepos.AddAsync(entity);
+            if (!success)
+                return BadRequest();
+
             return Ok();
         }
 
@@ -65,21 +68,27 @@ namespace Common.WebApiCore.Controllers
 
             var entity = dto.MapTo<Group>();
 
-            _groupRepos.Update(entity);
+            var success = _groupRepos.Update(entity);
+            if (!success)
+                return BadRequest();
+
             return Ok();
         }
 
         [HttpGet]
         [Route("remove/{id:int}")]
         [AllowAnonymous]
-        public IActionResult Update(int id)
+        public IActionResult Remove(int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            _groupRepos.Remove(id);
+            var success = _groupRepos.Remove(id);
+            if (!success)
+                return BadRequest();
+
             return Ok();
         }
     }

@@ -6,9 +6,9 @@ namespace Common.DTO
 {
     public class Sorting
     {
-        public string columnName { get; set; }
+        public string ColumnName { get; set; }
 
-        public string sortDerection { get; set; }
+        public string SortDerection { get; set; }
 
     }
 }

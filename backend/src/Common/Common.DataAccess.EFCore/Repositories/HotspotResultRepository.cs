@@ -78,9 +78,9 @@ namespace Common.DataAccess.EFCore.Repositories
         {
             if (sorting != null)
             {
-                if (sorting.sortDerection == "asc")
+                if (sorting.SortDerection == "asc")
                 {
-                    switch (sorting.columnName)
+                    switch (sorting.ColumnName)
                     {
                         case "drawNumber":
                             entities = entities.OrderBy(p => p.DrawNumber);
@@ -90,9 +90,9 @@ namespace Common.DataAccess.EFCore.Repositories
                             break;
                     }
                 }
-                if (sorting.sortDerection == "desc")
+                if (sorting.SortDerection == "desc")
                 {
-                    switch (sorting.columnName)
+                    switch (sorting.ColumnName)
                     {
                         case "drawNumber":
                             entities = entities.OrderByDescending(p => p.DrawNumber);

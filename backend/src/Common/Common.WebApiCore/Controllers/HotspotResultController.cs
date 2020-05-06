@@ -27,6 +27,22 @@ namespace Common.WebApiCore.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Filter(FilterHotspotResult filter)
         {
+            
+            { 
+                if (filter.StartSession < filter.EndSession)
+                {
+                    return BadRequest();
+                }
+            }
+
+            if (filter.StartDrawDate != null && filter.EndDrawDate != null) 
+            { 
+                if (filter.StartDrawDate.Value < filter.EndDrawDate.Value)
+                {
+                    return BadRequest();
+                }
+            }
+
             var allQuery = _hotspotResultRepos.GetByFilter(filter);
             var totalCount = await allQuery.CountAsync();
             allQuery = _hotspotResultRepos.Sort(allQuery, filter.Sorting);
@@ -67,7 +83,11 @@ namespace Common.WebApiCore.Controllers
 
             var entity = dto.MapTo<HotspotResult>();
 
-            await _hotspotResultRepos.AddAsync(entity);
+            var success = await _hotspotResultRepos.AddAsync(entity);
+
+            if (!success)
+                return BadRequest();
+
             return Ok();
         }
 
@@ -101,21 +121,28 @@ namespace Common.WebApiCore.Controllers
 
             var entity = dto.MapTo<HotspotResult>();
 
-            _hotspotResultRepos.Update(entity);
+            var success = _hotspotResultRepos.Update(entity);
+
+            if (!success)
+                return BadRequest();
+
             return Ok();
         }
 
         [HttpGet]
         [Route("remove/{id:int}")]
         [AllowAnonymous]
-        public IActionResult Update(int id)
+        public IActionResult Remove(int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            _hotspotResultRepos.Remove(id);
+            var success = _hotspotResultRepos.Remove(id);
+            if (!success)
+                return BadRequest();
+
             return Ok();
         }
     }

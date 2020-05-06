@@ -19,14 +19,14 @@ namespace Common.Services.Infrastructure
         Task<TEntity> FirstOrDefaultAsync();
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
         IQueryable<TEntity> Paging(IQueryable<TEntity> entities, Paging paging);
-        void Add(TEntity entity);
-        Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
-        void AddRange(IEnumerable<TEntity> entities);
-        Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
-        void Remove(int id);
-        void RemoveRange(IEnumerable<TEntity> entities);
-        void Update(TEntity entity);
-        void UpdateRange(IEnumerable<TEntity> entities);
+        bool Add(TEntity entity);
+        Task<bool> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
+        bool AddRange(IEnumerable<TEntity> entities);
+        Task<bool> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+        bool Remove(int id);
+        bool RemoveRange(IEnumerable<TEntity> entities);
+        bool Update(TEntity entity);
+        bool UpdateRange(IEnumerable<TEntity> entities);
         void SaveChanges();
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
     }

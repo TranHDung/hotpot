@@ -23,6 +23,7 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { HotspotResultService } from './services/hotspotResult.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -47,7 +48,9 @@ import {
     ThemeModule.forRoot(),
   ],
   bootstrap: [AppComponent],
-  providers: [],
+  providers: [
+    HotspotResultService
+  ],
 })
 export class AppModule {
 }

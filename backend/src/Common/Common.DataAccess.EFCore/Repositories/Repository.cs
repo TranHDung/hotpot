@@ -58,70 +58,138 @@ namespace Common.DataAccess.EFCore.Repositories
             return entities.Skip(paging.Skip).Take(paging.Top);
         }
 
-        public void Add(TEntity entity)
+        public bool Add(TEntity entity)
         {
-            entity.Created();
-            Context.Set<TEntity>().Add(entity);
-            SaveChanges();
-        }
-
-        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            entity.Created();
-            await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
-            await SaveChangesAsync(cancellationToken);
-        }
-
-        public void AddRange(IEnumerable<TEntity> entities)
-        {
-            foreach (var e in entities)
+            try
             {
-                e.Created();
-            }
-            Context.Set<TEntity>().AddRange(entities);
-            SaveChanges();
-        }
-        public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
-        {
-            foreach (var e in entities)
-            {
-                e.Created();
-            }
-            await Context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
-            await SaveChangesAsync(cancellationToken);
-        }
-
-        public void Remove(int id)
-        {
-            var entity = Context.Set<TEntity>().FirstOrDefault(e => e.Id == id);
-            if (entity != null) 
-            {
-                Context.Set<TEntity>().Remove(entity);
+                entity.Created();
+                Context.Set<TEntity>().Add(entity);
                 SaveChanges();
+                return true;
             }
-        }
-
-        public void RemoveRange(IEnumerable<TEntity> entities)
-        {
-            Context.Set<TEntity>().RemoveRange(entities);
-            SaveChanges();
-        }
-
-        public void Update(TEntity entity)
-        {
-            entity.Modified();
-            Context.Set<TEntity>().Update(entity);
-            SaveChanges();
-        }
-
-        public void UpdateRange(IEnumerable<TEntity> entities)
-        {
-            foreach (var e in entities)
+            catch(Exception ex)
             {
-                e.Modified();
+                return false;
             }
-            Context.Set<TEntity>().UpdateRange(entities);
-            SaveChanges();
+        }
+
+        public async Task<bool> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                entity.Created();
+                await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
+                await SaveChangesAsync(cancellationToken);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool AddRange(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                foreach (var e in entities)
+                {
+                    e.Created();
+                }
+                Context.Set<TEntity>().AddRange(entities);
+                SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                foreach (var e in entities)
+                {
+                    e.Created();
+                }
+                await Context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
+                await SaveChangesAsync(cancellationToken);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
+        }
+
+        public bool Remove(int id)
+        {
+            try
+            {
+                var entity = Context.Set<TEntity>().FirstOrDefault(e => e.Id == id);
+                if (entity != null)
+                {
+                    Context.Set<TEntity>().Remove(entity);
+                    SaveChanges();
+                    return true;    
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
+        }
+
+        public bool RemoveRange(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                Context.Set<TEntity>().RemoveRange(entities);
+                SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool Update(TEntity entity)
+        {
+            try
+            {
+                entity.Modified();
+                Context.Set<TEntity>().Update(entity);
+                SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool UpdateRange(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                foreach (var e in entities)
+                {
+                    e.Modified();
+                }
+                Context.Set<TEntity>().UpdateRange(entities);
+                SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
         }
 
 

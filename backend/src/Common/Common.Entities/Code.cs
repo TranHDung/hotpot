@@ -16,9 +16,6 @@ namespace Common.Entities
         public string NumbersString { get; set; }
 
         [Required]
-        public DateTime CreateDate { get; set; }
-
-        [Required]
         public int NotAppeareCount { get; set; }
 
         [Required]
