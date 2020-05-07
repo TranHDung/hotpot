@@ -17,9 +17,9 @@ namespace Common.Entities
         [StringLength(500)]
         public string BlueString { get; set; }
 
-        [Required]
-        [StringLength(5)]
-        public string YellowNumber { get; set; }
+        //[Required]
+        //[StringLength(5)]
+        //public string YellowNumber { get; set; }
 
         public ICollection<WonCode> WonCodes { get; set; }
 

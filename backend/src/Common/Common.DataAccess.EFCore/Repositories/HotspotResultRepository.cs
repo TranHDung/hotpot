@@ -106,5 +106,20 @@ namespace Common.DataAccess.EFCore.Repositories
 
             return entities;
         }
+
+        public bool Update(HotspotResultDTO dto)
+        {
+            var entity = FirstOrDefault(e => e.Id == dto.Id);
+            if (entity == null)
+            {
+                return false;
+            }
+
+            entity.DrawNumber = dto.DrawNumber;
+            entity.DrawDate = dto.DrawDate;
+            entity.BlueNumbers = dto.BlueNumbers;
+
+            return Update(entity);
+        }
     }
 }

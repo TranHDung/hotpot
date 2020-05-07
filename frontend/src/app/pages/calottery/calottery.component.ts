@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HotspotResultService } from '../../services/hotspotResult.service';
 import { HotspotResult, FilterHotspotResult } from '../../models/HotspotResult';
-import { Sorting } from '../../models/Sorting';
-import { Paging } from '../../models/Paging';
 import { Page } from '../../models/Page';
 import { NbDialogService } from '@nebular/theme';
 import { EditCalotteryComponent } from './edit-calottery/edit-calottery.component';
@@ -54,7 +52,7 @@ export class CalotteryComponent implements OnInit {
     this._dialogService.open(EditCalotteryComponent,{context: {hotspotResultId: 0}})
     .onClose
     .subscribe(() => {
-
+      this.load();
     });
   }
 }

@@ -1,29 +1,40 @@
-<nb-card size="large" class="dialog-card">
+<nb-card size="medium" class="dialog-card">
   <nb-card-header>{{ title }}</nb-card-header>
+
   <nb-card-body>
       <input
         nbInput
         fullWidth
-        class="mb-3"
         type="text"
         [owlDateTimeTrigger]="dt"
         [owlDateTime]="dt"
         placeholder="Draw date"
+        [(ngModel)]="hotspotResult.drawDate"
       />
-      <owl-date-time #dt></owl-date-time>
-      <input nbInput fullWidth class="mb-3" type="number" placeholder="Draw number" />
+      <owl-date-time  #dt></owl-date-time>
+      <span class="invalid" *ngIf="submiting && !hotspotResult.drawDate">Draw date is required</span>
+
+      <input nbInput fullWidth  [(ngModel)]="hotspotResult.drawNumber" class="mt-2" type="number" placeholder="Draw number" />
+      <span class="invalid" *ngIf="submiting && !hotspotResult.drawNumber">Draw number is required</span>
+      
       <ng-select
-        class="custom"
-        [items]="[]"
+        class="custom mt-2"
+        [class.yellow]="numbers.length == 20"
+        [(ngModel)]="numbers"
         [addTag]="true"
         [multiple]="true"
         [selectOnTab]="true"
         [isOpen]="false"
+        [maxSelectedItems] = "20"
         placeholder="Numbers"
+        (add)="onAdd($event)"
       >
       </ng-select>
+      <span class="invalid" *ngIf="submiting && numbers.length < 20">Must be full of 20 numbers</span>
   </nb-card-body>
+
   <nb-card-footer>
-    <button nbButton status="primary">Dismiss Dialog</button>
+    <button nbButton *ngIf="hotspotResultId == 0" (click)="onCreate()" class="float-right" status="primary">Create</button>
+    <button nbButton *ngIf="hotspotResultId > 0" (click)="onSave()" class="float-right" status="primary">Save</button>
   </nb-card-footer>
 </nb-card>

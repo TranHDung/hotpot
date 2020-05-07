@@ -10,6 +10,5 @@ namespace Common.DTO
         public int DrawNumber { get; set; }
         public DateTime DrawDate { get; set; }
         public ICollection<string> BlueNumbers { get; set; }
-        public string YellowNumber { get; set; }
     }
 }

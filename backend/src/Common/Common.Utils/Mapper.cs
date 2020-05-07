@@ -13,5 +13,10 @@ namespace Common.Utils
         {
             return AutoMapper.Mapper.Map<TResult>(source);
         }
+
+        public static TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
+        {
+            return AutoMapper.Mapper.Map<TSource, TDestination>(source, destination);
+        }
     }
 }

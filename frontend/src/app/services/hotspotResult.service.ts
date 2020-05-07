@@ -13,4 +13,8 @@ export class HotspotResultService {
     getByFilter( filter: FilterHotspotResult): Observable<ResultFilter<HotspotResult>>{
         return this._http.post(`hotspotResult/filter`,filter);
     }
+
+    add(data: HotspotResult): Observable<any>{
+        return this._http.post(`hotspotResult/add`,data);
+    }
 }

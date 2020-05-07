@@ -63,23 +63,26 @@ namespace Common.WebApiCore.Controllers
                 return BadRequest();
             }
 
-            if (dto.DrawDate == default)
+            if (dto.DrawDate == null)
             {
                 return BadRequest();
             }
 
-            if (string.IsNullOrWhiteSpace(dto.YellowNumber))
+            if (dto.BlueNumbers == null)
             {
                 return BadRequest();
             }
 
-            if (dto.BlueNumbers == null && dto.BlueNumbers.Count < 20)
+            if (dto.BlueNumbers.Count != 20)
             {
-                if (dto.BlueNumbers.GroupBy(x => x).Any(g => g.Count() > 1))
-                { 
-                    return BadRequest();
-                }
+                return BadRequest();
             }
+
+            if (dto.BlueNumbers.GroupBy(x => x).Any(g => g.Count() > 1))
+            {
+                return BadRequest();
+            }
+
 
             var entity = dto.MapTo<HotspotResult>();
 
@@ -94,35 +97,42 @@ namespace Common.WebApiCore.Controllers
         [HttpPost]
         [Route("update")]
         [AllowAnonymous]
-        public IActionResult Update(HotspotResult dto)
+        public IActionResult Update(HotspotResultDTO dto)
         {
             if (dto.DrawNumber < 0)
             {
                 return BadRequest();
             }
 
-            if (dto.DrawDate == default)
+            if (dto.DrawDate == null)
             {
                 return BadRequest();
             }
 
-            if (string.IsNullOrWhiteSpace(dto.YellowNumber))
+            if (dto.BlueNumbers != null && dto.BlueNumbers.Count != 20)
             {
                 return BadRequest();
             }
 
-            if (dto.BlueNumbers == null && dto.BlueNumbers.Count < 20)
+            if (dto.BlueNumbers.GroupBy(x => x).Any(g => g.Count() > 1))
             {
-                if (dto.BlueNumbers.GroupBy(x => x).Any(g => g.Count() > 1))
-                {
-                    return BadRequest();
-                }
+                return BadRequest();
             }
 
-            var entity = dto.MapTo<HotspotResult>();
+            var success = _hotspotResultRepos.Update(dto);
 
-            var success = _hotspotResultRepos.Update(entity);
+            if (!success)
+                return BadRequest();
 
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("removeRange")]
+        [AllowAnonymous]
+        public IActionResult RemoveRange(IEnumerable<int> ids)
+        {
+            var success = _hotspotResultRepos.RemoveRange(ids);
             if (!success)
                 return BadRequest();
 

@@ -25,7 +25,7 @@ namespace Common.DataAccess.EFCore.Repositories
         {
             // Here we are working with a DbContext, not PlutoContext. So we don't have DbSets 
             // such as Courses or Authors, and we need to use the generic Set() method to access them.
-            return Context.Set<TEntity>().Find(id);
+            return Context.Set<TEntity>().FirstOrDefault(e => e.Id == id);
         }
 
         public IQueryable<TEntity> GetAll()
@@ -144,10 +144,11 @@ namespace Common.DataAccess.EFCore.Repositories
             
         }
 
-        public bool RemoveRange(IEnumerable<TEntity> entities)
+        public bool RemoveRange(IEnumerable<int> ids)
         {
             try
             {
+                var entities = Context.Set<TEntity>().Where(e => ids.Contains(e.Id)).AsEnumerable();
                 Context.Set<TEntity>().RemoveRange(entities);
                 SaveChanges();
                 return true;
@@ -162,9 +163,6 @@ namespace Common.DataAccess.EFCore.Repositories
         {
             try
             {
-                var exist = GetById(entity.Id);
-                if (exist == null)
-                    return false;
                 entity.Modified();
                 Context.Set<TEntity>().Update(entity);
                 SaveChanges();

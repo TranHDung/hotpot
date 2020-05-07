@@ -11,5 +11,7 @@ namespace Common.Services.Infrastructure.Repositories
         IQueryable<HotspotResult> GetByFilter(FilterHotspotResult filter);
         Task<int> GetNewestDrawNumberAsync();
         IQueryable<HotspotResult> Sort(IQueryable<HotspotResult> entities, Sorting sorting);
+
+        bool Update(HotspotResultDTO entity);
     }
 }

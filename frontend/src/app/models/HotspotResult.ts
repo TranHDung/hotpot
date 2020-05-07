@@ -5,7 +5,7 @@ export class HotspotResult {
     id: number;
     drawNumber:number;
     drawDate: Date;
-    blueNumber:string[];
+    blueNumbers:string[];
     yellowNumber:string;
     createAt:Date;
 }

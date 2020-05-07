@@ -24,7 +24,7 @@ namespace Common.Services.Infrastructure
         bool AddRange(IEnumerable<TEntity> entities);
         Task<bool> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
         bool Remove(int id);
-        bool RemoveRange(IEnumerable<TEntity> entities);
+        bool RemoveRange(IEnumerable<int> ids);
         bool Update(TEntity entity);
         bool UpdateRange(IEnumerable<TEntity> entities);
         void SaveChanges();

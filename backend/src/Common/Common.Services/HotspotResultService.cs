@@ -26,10 +26,10 @@ namespace Common.Services
             var html = await httpClient.GetStringAsync(url);
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
-            //cache
+            // need cache
             var _drawNumber = await _hotspotResultRepos.GetNewestDrawNumberAsync();
             var drawNumber = Int32.Parse(doc.QuerySelector(".current-drawNumber").InnerText);
-
+            //need refactor
             if (_drawNumber != drawNumber)
             {
                 var date = doc.QuerySelectorAll(".htspt__cards--next-draw-date strong")[0].InnerText;
@@ -38,8 +38,7 @@ namespace Common.Services
                 {
                     DrawNumber = drawNumber,
                     DrawDate = DateTime.ParseExact(date + " " + time, "MMM d, yyyy h:mm tt", CultureInfo.InvariantCulture),
-                    BlueNumbers = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item.blue-num").Select(e => e.InnerText).ToList(),
-                    YellowNumber = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item.yellow-num").Select(e => e.InnerText).ToList().FirstOrDefault()
+                    BlueNumbers = doc.QuerySelectorAll(".list-inline.htspt__cards--winning-numbers .list-inline-item").Select(e => e.InnerText).ToList(),
                 };
 
                 await _hotspotResultRepos.AddAsync(result);
