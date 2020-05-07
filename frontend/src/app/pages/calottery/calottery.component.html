@@ -1,25 +1,86 @@
 <nb-card>
-  <ngx-datatable
-    class="material"
-    [rows]="rows"
-    [headerHeight]="50"
-    [footerHeight]="50"
-    rowHeight="auto"
-    [externalPaging]="true"
-    [count]="page.totalElements"
-    [offset]="page.pageNumber"
-    [limit]="page.size"
-  >
-    <ngx-datatable-column name="Draw Number" prop="drawNumber" sortable="true">
-    </ngx-datatable-column>
+  <nb-card-header>
+    Calottery
+    <button
+      nbButton
+      outline
+      class="float-right"
+      size="small"
+      status="info"
+      title="Add"
+      (click)="onAdd()"
+    >
+      <i class="fa fa-plus"></i>
+    </button>
+  </nb-card-header>
+</nb-card>
+<nb-card>
+  <nb-card-body class="p-0">
+    <ngx-datatable
+      class="material"
+      [rows]="rows"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      rowHeight="auto"
+      columnMode="flex"
+      [externalPaging]="true"
+      [externalSorting]="true"
+      [count]="page.totalElements"
+      [offset]="page.pageNumber"
+      [limit]="page.size"
+      [loadingIndicator]="loading"
+      (page)="setPage($event)"
+      (sort)="onSort($event)"
+    >
+      <ngx-datatable-column
+        [flexGrow]="1"
+        name="Draw Number"
+        prop="drawNumber"
+        sortable="true"
+      >
+        <ng-template
+          let-row="row"
+          let-value="value"
+          ngx-datatable-cell-template
+        >
+          <strong>{{ row.drawNumber }}</strong>
+        </ng-template>
+      </ngx-datatable-column>
 
-    <ngx-datatable-column name="Draw Date" prop="drawDate" sortable="true">
-    </ngx-datatable-column>
+      <ngx-datatable-column
+        [flexGrow]="2"
+        name="Draw Date"
+        prop="drawDate"
+        sortable="true"
+      >
+        <ng-template
+          let-row="row"
+          let-value="value"
+          ngx-datatable-cell-template
+        >
+          {{ row.drawDate | date: "MMM d, yyyy h:mm" }}
+        </ng-template>
+      </ngx-datatable-column>
 
-    <ngx-datatable-column name="Number" prop="blueNumber">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        <span *ngFor="let number of row.blueNumber">{{ number }}</span>
-      </ng-template>
-    </ngx-datatable-column>
-  </ngx-datatable>
+      <ngx-datatable-column
+        [sortable]="false"
+        [flexGrow]="9"
+        name="Number"
+        prop="blueNumbers"
+      >
+        <ng-template
+          let-row="row"
+          let-value="value"
+          ngx-datatable-cell-template
+        >
+          <span
+            *ngFor="let number of row.blueNumbers"
+            class="badge badge-primary mr-2"
+            >{{ number }}</span
+          >
+          <span class="badge badge-warning">{{ row.yellowNumber }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </nb-card-body>
 </nb-card>

@@ -13,10 +13,14 @@ import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PagesMenu } from './pages-menu';
 import { ECommerceModule } from './e-commerce/e-commerce.module';
-import { NbMenuModule, NbCalendarModule, NbCheckboxModule, NbCardModule } from '@nebular/theme';
+import { NbMenuModule, NbCalendarModule, NbCheckboxModule, NbCardModule, NbBadgeModule, NbButtonModule, NbDialogModule, NbDatepickerModule, NbInputModule } from '@nebular/theme';
 import { AuthModule } from '../@auth/auth.module';
 import { CalotteryComponent } from './calottery/calottery.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { EditCalotteryComponent } from './calottery/edit-calottery/edit-calottery.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -33,12 +37,21 @@ const PAGES_COMPONENTS = [
     NbCalendarModule,
     NbCheckboxModule,
     NbCardModule,
+    NbBadgeModule,
     NgxDatatableModule,
+    NbButtonModule,
+    NbInputModule,
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule,
+    NgSelectModule, 
+    FormsModule,
     AuthModule.forRoot(),
+    NbDialogModule.forRoot()
   ],
   declarations: [
     ...PAGES_COMPONENTS,
     CalotteryComponent,
+    EditCalotteryComponent
   ],
   providers: [
     PagesMenu,

@@ -15,24 +15,22 @@ export class FilterHotspotResult {
     startSession: number;
     endSession:number;
     topSeccion:number;
-    groupId:string;
-    codeId:string;
+    groupId:number;
+    codeId:number;
     startDrawDate: Date;
     endDrawDate: Date;
-    createAt:Date;
     sorting: Sorting;
     paging: Paging;
 
-    constructor(sorting: Sorting,paging: Paging) {
-        this.startSession = null;
-        this.endSession = null;
-        this.topSeccion = null;
-        this.groupId = null;
-        this.codeId = null;
-        this.startDrawDate  = null;
-        this.endDrawDate  = null;
-        this.createAt = null;
-        this.sorting = sorting;
-        this.paging = paging;
+    constructor() {
+        this.startSession = 0;
+        this.endSession = 0;
+        this.topSeccion = 0;
+        this.groupId = 0;
+        this.codeId = 0;
+        this.startDrawDate = null;
+        this.endDrawDate = null;
+        this.sorting = new Sorting();
+        this.paging = new Paging();
     }
 }

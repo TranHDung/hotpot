@@ -59,7 +59,7 @@ namespace Common.WebApiCore.Controllers
         [HttpPost]
         [Route("update")]
         [AllowAnonymous]
-        public IActionResult Update(GroupDTO dto)
+        public IActionResult Update(Group dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
             {

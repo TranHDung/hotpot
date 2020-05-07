@@ -30,22 +30,22 @@ namespace Common.DataAccess.EFCore.Repositories
                 query = query.Where(e => e.DrawDate <= filter.EndDrawDate);
             }
 
-            if (filter.StartSession != null)
+            if (filter.StartSession > 0)
             {
                 query = query.Where(e => e.DrawNumber >= filter.StartSession);
             }
 
-            if (filter.EndSession != null)
+            if (filter.EndSession > 0)
             {
                 query = query.Where(e => e.DrawNumber <= filter.EndSession);
             }
 
-            if (filter.TopSeccion != null)
+            if (filter.TopSeccion > 0)
             {
-                query = query.OrderByDescending(e => e.DrawNumber).Take(filter.TopSeccion.Value);
+                query = query.OrderByDescending(e => e.DrawNumber).Take(filter.TopSeccion);
             }
 
-            if (filter.CodeId != null)
+            if (filter.CodeId > 0)
             {
                 var hotspotResultWasWon = Context.WonCodes
                                           .Where(e => e.CodeId == filter.CodeId).Select(e => e.HotspotResultId);
@@ -53,7 +53,7 @@ namespace Common.DataAccess.EFCore.Repositories
                        .Where(e => hotspotResultWasWon.Contains(e.Id));
             }
 
-            if (filter.GroupId != null)
+            if (filter.GroupId > 0)
             {
                 var hotspotResultWasWon = Context.WonCodes
                                                  .Include(wc => wc.Code)

@@ -162,6 +162,9 @@ namespace Common.DataAccess.EFCore.Repositories
         {
             try
             {
+                var exist = GetById(entity.Id);
+                if (exist == null)
+                    return false;
                 entity.Modified();
                 Context.Set<TEntity>().Update(entity);
                 SaveChanges();

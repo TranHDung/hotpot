@@ -27,7 +27,7 @@ namespace Common.WebApiCore.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Filter(FilterCode filter)
         {
-            if (filter.StartNotAppeareCount.Value < filter.EndNotAppeareCount.Value)
+            if (filter.StartNotAppeareCount < filter.EndNotAppeareCount)
             {
                 return BadRequest();
             }
@@ -45,7 +45,7 @@ namespace Common.WebApiCore.Controllers
         [HttpPost]
         [Route("add")]
         [AllowAnonymous]
-        public async Task<IActionResult> Add(AddOrUpdateCodeDTO dto)
+        public async Task<IActionResult> Add(CodeDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
             {
@@ -77,7 +77,7 @@ namespace Common.WebApiCore.Controllers
         [HttpPost]
         [Route("update")]
         [AllowAnonymous]
-        public async Task<IActionResult> Update(AddOrUpdateCodeDTO dto)
+        public async Task<IActionResult> Update(Code dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
             {

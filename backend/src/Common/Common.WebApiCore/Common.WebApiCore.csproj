@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Common.WebApiCore</AssemblyName>
+    <UserSecretsId>5f8c2a23-a311-472c-ab91-a480f4ad1430</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

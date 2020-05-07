@@ -1,0 +1,29 @@
+<nb-card size="large" class="dialog-card">
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+      <input
+        nbInput
+        fullWidth
+        class="mb-3"
+        type="text"
+        [owlDateTimeTrigger]="dt"
+        [owlDateTime]="dt"
+        placeholder="Draw date"
+      />
+      <owl-date-time #dt></owl-date-time>
+      <input nbInput fullWidth class="mb-3" type="number" placeholder="Draw number" />
+      <ng-select
+        class="custom"
+        [items]="[]"
+        [addTag]="true"
+        [multiple]="true"
+        [selectOnTab]="true"
+        [isOpen]="false"
+        placeholder="Numbers"
+      >
+      </ng-select>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="primary">Dismiss Dialog</button>
+  </nb-card-footer>
+</nb-card>

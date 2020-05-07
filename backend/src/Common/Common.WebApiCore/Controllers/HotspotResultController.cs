@@ -94,7 +94,7 @@ namespace Common.WebApiCore.Controllers
         [HttpPost]
         [Route("update")]
         [AllowAnonymous]
-        public IActionResult Update(HotspotResultDTO dto)
+        public IActionResult Update(HotspotResult dto)
         {
             if (dto.DrawNumber < 0)
             {
